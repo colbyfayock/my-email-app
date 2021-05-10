@@ -3,6 +3,21 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
+  async function handleOnSubmit(e) {
+    e.preventDefault();
+
+    const formData = {};
+
+    Array.from(e.currentTarget.elements).forEach(field => {
+      if ( !field.name ) return;
+      formData[field.name] = field.value;
+    });
+
+    await fetch('/api/mail', {
+      method: 'POST',
+      body: JSON.stringify(formData)
+    });
+  }
   return (
     <div className={styles.container}>
       <Head>
@@ -46,7 +61,7 @@ export default function Home() {
               border-radius: .2em;
             }
           `}</style>
-          <form>
+          <form onSubmit={handleOnSubmit}>
             <p>
               <label htmlFor="name">Name</label>
               <input id="name" type="text" name="name" />
